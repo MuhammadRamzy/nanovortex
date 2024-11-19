@@ -1,10 +1,10 @@
 # NanoVortex: Advanced Magnetic Nanobot Simulation Framework
 
-![NanoVortex](media\nanovortex.png)
+![NanoVortex](media/nanovortex.png)
 
 ## 🌟 Overview
 NanoVortex is a state-of-the-art physics-based simulation framework for magnetically-controlled nanobots in biomedical applications. It combines advanced fluid dynamics, precise magnetic field modeling, and reinforcement learning to develop and validate navigation strategies for next-generation medical procedures.
-![System Architecture](media\sysArch.png)
+![System Architecture](media/sysArch.png)
 [Figure 1: NanoVortex System Architecture]
 
 ## 📚 Table of Contents
@@ -25,7 +25,7 @@ NanoVortex is a state-of-the-art physics-based simulation framework for magnetic
 - **Tissue Interaction**: Multi-layer tissue boundary modeling
 - **Physical Properties**: Temperature, viscosity, and density variations
 
-![Biological ENv](media\bioEnv.png)
+![Biological ENv](media/bioEnv.png)
 [Figure 2: Biological Environment Components]
 
 ### Advanced Physics Engine
@@ -36,7 +36,7 @@ NanoVortex is a state-of-the-art physics-based simulation framework for magnetic
 | Particle Physics | Brownian motion and collision detection | `physics/forces.py` |
 | Thermal Effects | Temperature-dependent behavior modeling | `physics/thermodynamics.py` |
 
-![Physics Engine](media\phyEng.png)
+![Physics Engine](media/phyEng.png)
 [Figure 3: Physics Engine Architecture]
 
 ### Nanobot Specifications
@@ -49,7 +49,7 @@ NANOBOT_SPECS = {
     "sensor_types": ["position", "orientation", "field_strength"]
 }
 ```
-![NanoBot](media\nanoBot.png)
+![NanoBot](media/nanoBot.png)
 [Figure 4: Nanobot Component Diagram]
 
 ## 💡 System Architecture
@@ -72,7 +72,7 @@ NANOBOT_SPECS = {
    - Real-time navigation
    - Swarm coordination
 
-![Control System Flow](media\contSysFLow.png)
+![Control System Flow](media/contSysFLow.png)
 [Figure 5: Control System Flow]
 
 ### Key Parameters
@@ -150,7 +150,7 @@ for step in range(1000):
     if done:
         break
 ```
-![Simulation Workflow](media\simWorkFlow.png)
+![Simulation Workflow](media/simWorkFlow.png)
 [Figure 7: Simulation Workflow]
 
 ### Visualization Tools
