@@ -1,69 +1,31 @@
 import numpy as np
-from typing import Tuple
-from src.config import SimulationConfig as cfg
+from ..config import SimConfig
 
 class MagneticField:
-    """
-    Simulates external magnetic field for nanobot control.
-    Implements magnetic field calculations and resulting forces.
-    """
-    
     def __init__(self):
-        self.max_field_strength = cfg.MAX_FIELD_STRENGTH
-        self.field_direction = np.zeros(3)
-        self.gradient = np.zeros((3, 3))
+        self.strength = SimConfig.MAGNETIC_FIELD_STRENGTH
         
-    def set_field_direction(self, direction: np.ndarray):
-        """Update magnetic field direction"""
-        self.field_direction = direction / (np.linalg.norm(direction) + 1e-10)
+    def calculate_magnetic_force(self, position, field_source_position, material_susceptibility):
+        """Calculate magnetic force on nanobot based on field gradient"""
+        # F = V * χ * (B * ∇)B / μ0
+        # Simplified model assuming linear field gradient
         
-    def set_field_gradient(self, gradient: np.ndarray):
-        """Set magnetic field gradient for force calculation"""
-        self.gradient = gradient
+        r = position - field_source_position
+        distance = np.linalg.norm(r)
         
-    def calculate_field_at_position(self, position: np.ndarray) -> np.ndarray:
-        """
-        Calculate magnetic field vector at given position.
-        Includes spatial variation of field.
-        """
-        # Basic field calculation
-        base_field = self.max_field_strength * self.field_direction
+        if distance == 0:
+            return np.zeros(3)
+            
+        # Calculate field gradient (simplified model)
+        direction = r / distance
+        field_gradient = -self.strength * direction / (distance ** 2)
         
-        # Add spatial variation (simplified model)
-        field_variation = np.dot(self.gradient, position)
+        # Calculate force
+        force = (material_susceptibility * self.strength * field_gradient) / (4 * np.pi * 1e-7)
         
-        return base_field + field_variation
-    
-    def calculate_magnetic_force(self, position: np.ndarray, magnetic_moment: float) -> np.ndarray:
-        """
-        Calculate magnetic force on nanobot using F = (m·∇)B where:
-        m = magnetic moment
-        B = magnetic field
-        """
-        # Get field and gradient at position
-        field = self.calculate_field_at_position(position)
-        
-        # Calculate force using magnetic moment and field gradient
-        force = magnetic_moment * np.dot(self.gradient, self.field_direction)
-        
-        # Add position-dependent modulation
-        distance_from_center = np.linalg.norm(position)
-        position_factor = np.exp(-distance_from_center / cfg.BOUNDARY_SIZE)
-        
-        return force * position_factor
-    
-    def calculate_magnetic_torque(self, magnetic_moment_vector: np.ndarray) -> np.ndarray:
-        """
-        Calculate magnetic torque τ = m × B where:
-        m = magnetic moment vector
-        B = magnetic field
-        """
-        field = self.max_field_strength * self.field_direction
-        return np.cross(magnetic_moment_vector, field)
-
-    def calculate_field_energy(self, position: np.ndarray, magnetic_moment: float) -> float:
-        """
-        Calculate magnetic potential energy E = -m·B
-        """
-        field = self.calculate_field_at_position(position)
-        return -magnetic_moment * np.dot(self.field_direction, field)
+        # Clip force magnitude
+        force_magnitude = np.linalg.norm(force)
+        if force_magnitude > SimConfig.MAX_MAGNETIC_FORCE:
+            force = force * SimConfig.MAX_MAGNETIC_FORCE / force_magnitude
+            
+        return force

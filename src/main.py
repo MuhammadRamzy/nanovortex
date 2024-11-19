@@ -1,51 +1,42 @@
-import pybullet as p
 import numpy as np
-from src.environment.nanobot_env import EnhancedNanobotEnv
-from src.training.ppo_trainer import train_nanobot
-from src.utils.visualization import Visualizer
-from src.utils.metrics import MetricsTracker
+import pybullet as p
+from environment.nanobot_env import NanobotEnv
+from agents.nanobot import NanobotAgent
+from training.ppo_trainer import PPOTrainer
+from utils.visualization import Visualizer
+from utils.metrics import MetricsLogger
 
 def main():
-    # Initialize environment
-    env = EnhancedNanobotEnv()
-    
-    # Initialize visualization and metrics
+    env = NanobotEnv()
+    agent = NanobotAgent(obs_dim=9, action_dim=3)
+    trainer = PPOTrainer(agent, env)
     visualizer = Visualizer()
-    metrics = MetricsTracker()
+    metrics = MetricsLogger()
     
-    # Train the model
-    model = train_nanobot(env)
+    num_episodes = 1000
     
-    # Run evaluation episodes
-    n_evaluation_episodes = 10
-    for episode in range(n_evaluation_episodes):
+    for episode in range(num_episodes):
         obs = env.reset()
         done = False
-        episode_reward = 0
+        episode_rewards = []
         
         while not done:
-            # Get action from trained model
-            action, _ = model.predict(obs, deterministic=True)
+            mean, std = agent(torch.FloatTensor(obs))
+            dist = torch.distributions.Normal(mean, std)
+            action = dist.sample().numpy()
             
-            # Step environment
-            obs, reward, done, info = env.step(action)
+            next_obs, reward, done, _, info = env.step(action)
+            episode_rewards.append(reward)
             
-            # Update metrics
-            metrics.update(reward, info)
+            visualizer.update(next_obs[:3], env.target_pos)
+            obs = next_obs
             
-            # Visualize if needed
-            visualizer.update(env)
+        metrics.log_episode(episode_rewards, len(episode_rewards), 
+                          info.get('success', False), info.get('collisions', 0))
+                          
+        if episode % 10 == 0:
+            print(f"Episode {episode}: {metrics.get_metrics()}")
             
-            episode_reward += reward
-        
-        # Log episode results
-        metrics.log_episode(episode, episode_reward)
-    
-    # Save results
-    metrics.save_results("evaluation_results.json")
-    visualizer.save_animation("nanobot_trajectory.gif")
-    
-    # Cleanup
     env.close()
 
 if __name__ == "__main__":

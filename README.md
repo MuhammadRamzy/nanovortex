@@ -116,10 +116,22 @@ source venv/bin/activate  # Linux/Mac
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Run tests
-pytest tests/
 ```
+
+## To run the simulation:
+
+### 1. Make sure all the code files are in their correct directories according to the project structure.
+
+### 2. Run the diagnostics first:
+```bash
+python debug_utils.py
+```
+
+### 3. If diagnostics pass, run the simulation:
+```bash
+python run_simulation.py
+```
+
 
 ## 📊 Usage Guide
 
@@ -216,3 +228,9 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## 📄 License
 NanoVortex is released under the MIT License. See [LICENSE](LICENSE) for details.
+
+
+
+
+
+
