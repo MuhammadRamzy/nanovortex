@@ -2,6 +2,7 @@ import pybullet as p
 import numpy as np
 import torch
 import os
+import sys
 
 def check_system_compatibility():
     checks = {
