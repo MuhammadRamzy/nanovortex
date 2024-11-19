@@ -120,14 +120,14 @@ pip install -r requirements.txt
 
 ## To run the simulation:
 
-### 1. Make sure all the code files are in their correct directories according to the project structure.
+#### 1. Make sure all the code files are in their correct directories according to the project structure.
 
-### 2. Run the diagnostics first:
+#### 2. Run the diagnostics first:
 ```bash
 python debug_utils.py
 ```
 
-### 3. If diagnostics pass, run the simulation:
+#### 3. If diagnostics pass, run the simulation:
 ```bash
 python run_simulation.py
 ```
