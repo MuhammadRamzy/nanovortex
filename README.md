@@ -72,7 +72,7 @@ NANOBOT_SPECS = {
    - Real-time navigation
    - Swarm coordination
 
-![Control System Flow](media/contSysFLow.png)
+![Control System Flow](media/contSysFlow.png)
 [Figure 5: Control System Flow]
 
 ### Key Parameters
