@@ -105,7 +105,7 @@ NANOBOT_SPECS = {
 ### Setup Instructions
 ```bash
 # Clone the repository
-git clone https://github.com/muhammadramzy/nanovortex.git
+git clone https://github.com/MuhammadRamzy/nanovortex.git
 cd nanovortex
 
 # Create virtual environment
